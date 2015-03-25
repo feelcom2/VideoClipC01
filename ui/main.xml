@@ -96,7 +96,7 @@
 			</WINDOW>
 			<WINDOW layout="720,96" align="linear:horizontal">
 				<RADIO id="tabMenuRadio" layout="238,96" groupId="tabMenu" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" selected="true" onClick="navigationMain.selectItem = 'featured'">
-					<LABEL layout="238,96" text="Featured" themeId="themeRadioLabelText" />
+					<LABEL layout="238,96" text="1Featured" themeId="themeRadioLabelText" />
 				</RADIO>
 				<LABEL layout="2,97" defaultImg="/res/tabLine.png" />
 				<RADIO id="tabMenuRadio" layout="238,96" groupId="tabMenu" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" onClick="navigationMain.selectItem = 'allTalks'">
@@ -110,7 +110,7 @@
 			</WINDOW>
 
 			<NAVIGATIONCONTAINER id="navigationMain" layout="720,1038" selectedItem="featured" defaultImg="#ffffff">
-				<VIEWITEM id="1featured" src="./featured.xml" transitionInEffect="none" transitionOutEffect="none" />
+				<VIEWITEM id="featured" src="./featured.xml" transitionInEffect="none" transitionOutEffect="none" />
 				<VIEWITEM id="allTalks" src="./allTalks.xml" transitionInEffect="none" transitionOutEffect="none" />
 				<VIEWITEM id="myTalks" src="./myTalks.xml" transitionInEffect="none" transitionOutEffect="none" />
 			</NAVIGATIONCONTAINER>
