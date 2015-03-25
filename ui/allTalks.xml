@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="themeMain">
+		<THEME id="themetabLabelText" fontSize="20" textAlign="center" multiLine="true" minFontSize="-1" />
+	</THEMES>
+
+	<UILAYOUT portrait="720,1038" theme="themeMain">
+		<WINDOW layout="0,0,720,1038" align="linear:vertical">
+			<WINDOW layout="720,89" align="linear:horizontal|center" defaultImg="#ffffff">
+				<RADIO layout="140,68" groupId="talks" style="button" defaultImg="/res/tab4_1_nor.png" checkedImg="/res/tab4_1_sel.png" selected="true"
+					onClick="tagsTab.textColor='#ffffff', themesTab.textColor='#000000', ratingsTab.textColor='#000000', languagesTab.textColor='#000000', navigationAllTalks.selectItem = 'tag'">
+					<LABEL id="tagsTab" layout="140,68" text="Tags" themeId="themetabLabelText" textColor="#ffffff" />
+				</RADIO>
+				<RADIO layout="140,68" groupId="talks" style="button" defaultImg="/res/tab4_2_nor.png" checkedImg="/res/tab4_2_sel.png"
+					onClick="tagsTab.textColor='#000000', themesTab.textColor='#ffffff', ratingsTab.textColor='#000000', languagesTab.textColor='#000000', navigationAllTalks.selectItem = 'themes'">
+					<LABEL id="themesTab" layout="140,68" text="Themes" themeId="themetabLabelText" textColor="#000000" />
+				</RADIO>
+				<RADIO layout="140,68" groupId="talks" style="button" defaultImg="/res/tab4_3_nor.png" checkedImg="/res/tab4_3_sel.png"
+					onClick="tagsTab.textColor='#000000', themesTab.textColor='#000000', ratingsTab.textColor='#ffffff', languagesTab.textColor='#000000', navigationAllTalks.selectItem = 'ratings'">
+					<LABEL id="ratingsTab" layout="140,68" text="Ratings" themeId="themetabLabelText" textColor="#000000" />
+				</RADIO>
+				<RADIO layout="140,68" groupId="talks" style="button" defaultImg="/res/tab4_4_nor.png" checkedImg="/res/tab4_4_sel.png"
+					onClick="tagsTab.textColor='#000000', themesTab.textColor='#000000', ratingsTab.textColor='#000000', languagesTab.textColor='#ffffff', navigationAllTalks.selectItem = 'languages'">
+					<LABEL id="languagesTab" layout="140,68" text="Languages" themeId="themetabLabelText" textColor="#000000" />
+				</RADIO>
+			</WINDOW>
+
+			<NAVIGATIONCONTAINER id="navigationAllTalks" layout="720,1038-89" selectedItem="tag">
+				<VIEWITEM id="tag" src="./tag.xml" transitionInEffect="none" transitionOutEffect="none" />
+				<VIEWITEM id="themes" src="./themes.xml" transitionInEffect="none" transitionOutEffect="none" />
+				<VIEWITEM id="ratings" src="./ratings.xml" transitionInEffect="none" transitionOutEffect="none" />
+				<VIEWITEM id="languages" src="./languages.xml" transitionInEffect="none" transitionOutEffect="none" />
+			</NAVIGATIONCONTAINER>
+		</WINDOW>
+	</UILAYOUT>
+</MOML>

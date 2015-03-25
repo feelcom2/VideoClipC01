@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="themeMain">
+		<THEME id="themeRadioLabelText" textColor="#000000" fontSize="30" textAlign="center" />
+	</THEMES>
+
+	<FUNCTION id="goNextCheck">
+		<CMD cmd="sound.stop(userVariable.soundValue)" />
+		<CMD condition="math.num(userVariable.audioPosition) &lt; math.num(userVariable.totalPosition)" cmd="userVariable.audioPosition = math.add(userVariable.audioPosition, 1), function.goAudioSetting"
+			elseCmd="device.toastPopup('마지막 오디오 입니다.')" />
+		<CMD condition="math.num(userVariable.audioPosition) == math.num(userVariable.totalPosition)" cmd="rewBtn.defaultImg='/res/ic_radiobar_rew.png', fwdBtn.defaultImg='/res/ic_radiobar_fwd_inactive.png'"
+			elseCmd="rewBtn.defaultImg='/res/ic_radiobar_rew.png', fwdBtn.defaultImg='/res/ic_radiobar_fwd.png'" />
+	</FUNCTION>
+
+	<FUNCTION id="goPrevCheck">
+		<CMD cmd="sound.stop(userVariable.soundValue)" />
+		<CMD condition="math.num(userVariable.audioPosition) &gt; 1" cmd="userVariable.audioPosition = math.sub(userVariable.audioPosition, 1),function.goAudioSetting" elseCmd="device.toastPopup('첫번째 오디오 입니다.')" />
+		<CMD condition="math.num(userVariable.audioPosition) == 1" cmd="rewBtn.defaultImg='/res/ic_radiobar_rew_inactive.png', fwdBtn.defaultImg='/res/ic_radiobar_fwd.png'" elseCmd="rewBtn.defaultImg='/res/ic_radiobar_rew.png', fwdBtn.defaultImg='/res/ic_radiobar_fwd.png'" />
+	</FUNCTION>
+
+	<FUNCTION id="goAudioSetting">
+		<CMD cmd="root.connectPopup.visible='visible'" />
+		<CMD cmd="userVariable.soundValue = sound.createSound(xpath.evaluateEx('audio', '/rss/channel/item['+userVariable.audioPosition+']/media:content/@url'), 'true' ,'')" />
+		<CMD cmd="audioThumbnail.defaultImg = xpath.evaluateEx('audio', '/rss/channel/item['+userVariable.audioPosition+']/media:thumbnail/@url')" />
+		<CMD cmd="function.isPlayPopup" delay="500"/>
+		<CMD cmd="playBtn.defaultImg = '/res/ic_radiobar_pause.png'" delay="500"/>
+		<CMD cmd="sound.play(userVariable.soundValue)" delay="500"/>
+	</FUNCTION>
+
+	<FUNCTION id="isPlayCheck">
+		<CMD cmd="root.connectPopup.visible='visible'" />
+		<CMD condition="sound.isPlay(userVariable.soundValue) == 'true'" cmd="{function.isPlayPopup, sound.pause(userVariable.soundValue), playBtn.defaultImg= '/res/ic_radiobar_play.png'}" elseCmd="{function.isPlayPopup, sound.play(userVariable.soundValue),playBtn.defaultImg= '/res/ic_radiobar_pause.png'}"
+			delay="500" />
+	</FUNCTION>
+
+	<FUNCTION id="audioVisibleCheck">
+		<CMD condition="userVariable.audioMenu == 'true'" cmd="function.audioInVisible" elseCmd="function.audioVisible" />
+	</FUNCTION>
+
+	<FUNCTION id="audioVisible">
+		<CMD cmd="userVariable.audioMenu= 'true'" />
+		<CMD cmd="autioWindow.top = 1115" />
+		<CMD cmd="animation.flyIn('autioWindow', 0,115,autioWindow.width,autioWindow.height,'',500,'')" />
+		<CMD cmd="userVariable.soundValue = sound.createSound(xpath.evaluateEx('audio', '/rss/channel/item['+userVariable.audioPosition+']/media:content/@url'), 'true' ,'')" delay="500" />
+		<CMD cmd="userVariable.totalPosition = xpath.evaluateEx('audio', 'count(/rss/channel/item)')" delay="500" />
+	</FUNCTION>
+
+	<FUNCTION id="audioInVisible">
+		<CMD cmd="userVariable.audioMenu= 'false'" />
+		<CMD cmd="animation.flyOut('autioWindow', 0,115,autioWindow.width,autioWindow.height,'',500,'')" />
+		<CMD cmd="sound.stop(userVariable.soundValue), playBtn.defaultImg= '/res/ic_radiobar_play.png'" delay="1500" />
+	</FUNCTION>
+
+	<FUNCTION id="goSearchVisible">
+		<CMD cmd="userVariable.searchMenu= 'true'" />
+		<CMD cmd="animation.flyIn('searchBarWindow', 0,-97,searchBarWindow.width,searchBarWindow.height,'',500,'')" />
+	</FUNCTION>
+
+	<FUNCTION id="goSearchInVisible">
+		<CMD cmd="userVariable.searchMenu= 'false'" />
+		<CMD cmd="animation.flyOut('searchBarWindow', 0,-97,searchBarWindow.width,searchBarWindow.height,'',500,'')" />
+	</FUNCTION>
+
+	<FUNCTION id="goSearch">
+		<CMD cmd="userVariable.searchValue = '/rss/channel//item[contains(itunes:summary/text(), \''+searchEdit.text+'\')]'" />
+		<CMD cmd="action:go('root.start_navigationContainer','search')" />
+	</FUNCTION>
+
+	<FUNCTION id="popupInvisible">
+		<CMD cmd="root.connectPopup.visible='invisible',root.connectPopup.waitcircle.repeat='false'" />
+	</FUNCTION>
+
+	<FUNCTION id="isPlayPopup">
+		<CMD condition="sound.isPlay(userVariable.soundValue) == 'true'" cmd="function.popupInvisible" elseCmd="function.isPlayPopup" delay="500" />
+	</FUNCTION>
+
+
+	<DATASOURCE id="audio" src="http://feeds.feedburner.com/tedtalks_audio" />
+
+	<CMD cmd="userVariable.audioMenu = 'false'" />
+	<CMD cmd="userVariable.searchMenu = 'false'" />
+	<CMD cmd="userVariable.audioPosition = 1" />
+	<UILAYOUT portrait="720,1230" theme="themeMain">
+		<WINDOW layout="0,0,720,1230" align="linear:vertical">
+			<WINDOW layout="720,96" align="relative" defaultImg="#ffffff">
+				<BUTTON layout="20,20,130,54" defaultImg="/res/top_ted.png" />
+				<BUTTON layout="553,0,96,96" defaultImg="/res/ic_search_gray.png" pressedImg="/res/ic_search_gray_sel.png" onClick="function.goSearchVisible" />
+				<BUTTON layout="649,0,71,96" defaultImg="/res/ic_audio_orange_actionbar.png" pressedImg="/res/ic_audio_orange_actionbar_sel.png" onClick="function.audioVisibleCheck" />
+			</WINDOW>
+			<WINDOW layout="720,96" align="linear:horizontal">
+				<RADIO id="tabMenuRadio" layout="238,96" groupId="tabMenu" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" selected="true" onClick="navigationMain.selectItem = 'featured'">
+					<LABEL layout="238,96" text="Featured" themeId="themeRadioLabelText" />
+				</RADIO>
+				<LABEL layout="2,97" defaultImg="/res/tabLine.png" />
+				<RADIO id="tabMenuRadio" layout="238,96" groupId="tabMenu" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" onClick="navigationMain.selectItem = 'allTalks'">
+					<LABEL layout="238,96" text="All Talks" themeId="themeRadioLabelText" />
+				</RADIO>
+				<LABEL layout="2,97" defaultImg="/res/tabLine.png" />
+				<RADIO id="tabMenuRadio" layout="238,96" groupId="tabMenu" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" onClick="navigationMain.selectItem = 'myTalks'">
+					<LABEL layout="238,96" text="My Talks" themeId="themeRadioLabelText" />
+				</RADIO>
+				<LABEL layout="2,97" defaultImg="/res/tabLine.png" />
+			</WINDOW>
+
+			<NAVIGATIONCONTAINER id="navigationMain" layout="720,1038" selectedItem="featured" defaultImg="#ffffff">
+				<VIEWITEM id="featured" src="./featured.xml" transitionInEffect="none" transitionOutEffect="none" />
+				<VIEWITEM id="allTalks" src="./allTalks.xml" transitionInEffect="none" transitionOutEffect="none" />
+				<VIEWITEM id="myTalks" src="./myTalks.xml" transitionInEffect="none" transitionOutEffect="none" />
+			</NAVIGATIONCONTAINER>
+		</WINDOW>
+
+		<WINDOW id="autioWindow" layout="0,1230,720,115" align="relative" defaultImg="#000000" onClick="function.audioInVisible">
+			<IMAGE id="audioThumbnail" layout="28,13,118,88" loadingImg="/res/placeholder_list.png" defaultImg="{xpath.evaluateEx('audio', '/rss/channel/item[1]/media:thumbnail/@url')}" />
+			<IMAGE layout="155,0,72,115" defaultImg="/res/ic_radiobar_audio.png" />
+			<BUTTON id="rewBtn" layout="285,27,60,60" defaultImg="/res/ic_radiobar_rew_inactive.png" onClick="function.goPrevCheck" />
+			<BUTTON id="playBtn" layout="370,15,80,80" defaultImg="/res/ic_radiobar_play.png" onClick="function.isPlayCheck" />
+			<BUTTON id="fwdBtn" layout="483,27,60,60" defaultImg="/res/ic_radiobar_fwd.png" onClick="function.goNextCheck" />
+			<BUTTON layout="643,39,32,32" defaultImg="/res/ic_radiobar_close.png" />
+		</WINDOW>
+
+		<WINDOW id="searchBarWindow" layout="0,0,720,97" align="relative" defaultImg="/res/searchBar.png" visible="invisible">
+			<EDIT id="searchEdit" layout="120,14,500,79" text="" placeholder="Search Talks" fontSize="40" textColor="#808080" fontStyle="bold" textAlign="vCenter" returnKeyType="go" defaultImg="#00ffffff" />
+			<BUTTON layout="35,18,60,60" defaultImg="/res/ted_launcher_icon.png" onClick="function.goSearchInVisible" />
+			<BUTTON layout="625,0,96,97" defaultImg="/res/ic_search_gray.png" onClick="function.goSearch" />
+		</WINDOW>
+	</UILAYOUT>
+</MOML>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="themeFeatured">
+		<THEME id="themetabLabelText" fontSize="30" textAlign="center" multiLine="true" minFontSize="-1" />
+	</THEMES>
+
+	<UILAYOUT portrait="720,1038" theme="themeFeatured">
+		<WINDOW layout="0,0,720,1038" align="linear:vertical">
+			<WINDOW layout="720,89" align="linear:horizontal|center" defaultImg="#ffffff">
+				<RADIO layout="178,68" groupId="tab" style="button" defaultImg="/res/tab1_nor.png" checkedImg="/res/tab1_sel.png" selected="true"
+					onClick="newTab.textColor='#ffffff', popularTab.textColor='#000000', navigationFeatured.selectItem = 'newPage'">
+					<LABEL id="newTab" layout="178,68" text="New" themeId="themetabLabelText" textColor="#ffffff" />
+				</RADIO>
+				<RADIO layout="178,68" groupId="tab" style="button" defaultImg="/res/tab2_nor.png" checkedImg="/res/tab2_sel.png"
+					onClick="popularTab.textColor='#ffffff', newTab.textColor='#000000', navigationFeatured.selectItem = 'popular'">
+					<LABEL id="popularTab" layout="178,68" text="Popular" themeId="themetabLabelText" textColor="#000000" />
+				</RADIO>
+			</WINDOW>
+			<NAVIGATIONCONTAINER id="navigationFeatured" layout="720,949" selectedItem="newPage">
+				<VIEWITEM id="newPage" src="./newPage.xml" transitionInEffect="none" transitionOutEffect="none" />
+				<VIEWITEM id="popular" src="./popular.xml" transitionInEffect="none" transitionOutEffect="none" />
+			</NAVIGATIONCONTAINER>
+		</WINDOW>
+	</UILAYOUT>
+</MOML>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="themeTag">
+		<THEME id="themeLableText" fontSize="30" textAlign="vCenter" multiLine="true" fontStyle="bold" minFontSize="-1" />
+	</THEMES>
+
+	<FUNCTION id="goSearch(value)">
+		<CMD cmd="userVariable.searchValue = '/rss/channel//item[contains(itunes:summary/text(), \''+value+'\')]'" />
+		<CMD cmd="userVariable.titleValue ='All Talks'" />
+		<CMD cmd="action:go('root.start_navigationContainer','search')" />
+	</FUNCTION>
+
+	<UILAYOUT portrait="720,949" theme="themeTag">
+		<WINDOW layout="0,0,720,949" align="relative" defaultImg="#ffffff">
+			<LIST2 id="alltalksList" layout="0,0,720,949" dataSource="/data/listData.xml" dataList="/DATA/LIST" divider="#e4e4e4">
+				<LISTLAYOUT>
+					<WINDOW layout="0,0,720,70" align="relative">
+						<LABEL layout="20,0,680,70" themeId="themeLableText" textColor="#000000" text="{xpath.evaluate('./data/text()')}" />
+					</WINDOW>
+					<BUTTON layout="0,0,720,70" defaultImg="#00000000" pressedImg="#95ffbfbf" onClick="function.goSearch(xpath.evaluate('./search/text()'))" />
+				</LISTLAYOUT>
+			</LIST2>
+			<LABEL layout="0,0,720,13" defaultImg="/res/shadow.png" />
+		</WINDOW>
+	</UILAYOUT>
+</MOML>

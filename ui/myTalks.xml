@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="themeMyTalks">
+		<THEME id="themetabLabelText" fontSize="20" textAlign="center" multiLine="true" minFontSize="-1" />
+	</THEMES>
+
+	<UILAYOUT portrait="720,1038" theme="themeMyTalks">
+		<WINDOW layout="0,0,720,1038" align="linear:vertical">
+			<WINDOW layout="720,89" align="linear:horizontal|center" defaultImg="#ffffff">
+				<RADIO layout="178,68" groupId="mytalks" style="button" defaultImg="/res/tab1_nor.png" checkedImg="/res/tab1_sel.png" selected="true"
+					onClick="downloadsTab.textColor='#ffffff', bookmarksTab.textColor='#000000', navigationMyTalks.selectItem = 'downloads'">
+					<LABEL id="downloadsTab" layout="178,68" text="Downloads" themeId="themetabLabelText" textColor="#ffffff" />
+				</RADIO>
+				<RADIO layout="178,68" groupId="mytalks" style="button" defaultImg="/res/tab2_nor.png" checkedImg="/res/tab2_sel.png"
+					onClick="bookmarksTab.textColor='#ffffff', downloadsTab.textColor='#000000', navigationMyTalks.selectItem = 'bookmarks'">
+					<LABEL id="bookmarksTab" layout="178,68" text="Bookmarks" themeId="themetabLabelText" textColor="#000000" />
+				</RADIO>
+			</WINDOW>
+			<NAVIGATIONCONTAINER id="navigationMyTalks" layout="720,949" selectedItem="downloads">
+				<VIEWITEM id="downloads" src="./downloads.xml" transitionInEffect="none" transitionOutEffect="none" />
+				<VIEWITEM id="bookmarks" src="./bookmarks.xml" transitionInEffect="none" transitionOutEffect="none" />
+			</NAVIGATIONCONTAINER>
+		</WINDOW>
+	</UILAYOUT>
+</MOML>

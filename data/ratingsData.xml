@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DATA>
+    <LIST>
+        <data>Beautiful</data>
+        <search>be</search>
+    </LIST>
+    <LIST>
+        <data>Courageous</data>
+        <search>ra</search>
+    </LIST>
+    <LIST>
+        <data>Fascinating</data>
+        <search>sc</search>
+    </LIST>
+    <LIST>
+        <data>Funny</data>
+        <search>fu</search>
+    </LIST>
+    <LIST>
+        <data>Informative</data>
+        <search>fo</search>
+    </LIST>
+    <LIST>
+        <data>Ingenious</data>
+        <search>ge</search>
+    </LIST>
+    <LIST>
+        <data>Inspiring</data>
+        <search>sp</search>
+    </LIST>
+    <LIST>
+        <data>Jaw-dropping</data>
+        <search>ja</search>
+    </LIST>
+    <LIST>
+        <data>Persuasive</data>
+        <search>pe</search>
+    </LIST>
+</DATA>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd" version="1.1.1">
+	<FUNCTION id="go_dbInit">
+		<CMD cmd="db.exec('CREATE TABLE IF NOT EXISTS videoclip( _id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, imagepath TEXT NOT NULL, about TEXT NOT NULL, videourl TEXT NOT NULL)')" />
+		<CMD cmd="db.exec('SELECT * FROM videoclip')" />
+		<CMD cmd="saveVariable.videoclipData = db.result.getXmlData()" />
+		<CMD cmd="saveVariable.videoSrcUrl =''" />
+		<CMD cmd="saveVariable.detailSubtitle = ''" />
+		<CMD cmd="saveVariable.detailImage =''" />
+		<CMD cmd="saveVariable.detailSummary =''" />
+	</FUNCTION>
+	<FUNCTION id="dbEscape(str)">
+		<CMD cmd="string.replace(str, '\'', '\'\'')" />
+	</FUNCTION>
+	<FUNCTION id="onFinishTransition">
+		<CMD condition="start_navigationContainer.selectedItem == 'video'">
+			<CMD cmd="application.orientation='all'" />
+			<ELSECMD cmd="application.orientation='defaultPortrait'" />
+		</CMD>
+	</FUNCTION>
+	<CMD cmd="userVariable.reLoadUrl = 'http://feeds.feedburner.com/tedtalks_video'" />
+	<CMD cmd="device.log('cgy', 'root : '  + document.fullPathId)" />
+	<CMD cmd="function.go_dbInit" />
+	<UILAYOUT portrait="720,1230" landscape="720,1230">
+		<NAVIGATIONCONTAINER id="start_navigationContainer" layout="0,0,720,1230" selectedItem="intro" onFinishTransition="function.onFinishTransition">
+			<VIEWITEM id="intro" src="intro.xml" transitionInEffect="fade" transitionOutEffect="fade" />
+			<VIEWITEM id="main" src="main.xml" transitionInEffect="fade" transitionOutEffect="fade">
+				<VIEWITEM id="search" src="search.xml" transitionInEffect="fade" transitionOutEffect="fade">
+					<VIEWITEM id="searchDetail" src="detail.xml" transitionInEffect="fade" transitionOutEffect="fade">
+						<VIEWITEM id="video" src="video.xml" transitionInEffect="fade" transitionOutEffect="fade" />
+					</VIEWITEM>
+				</VIEWITEM>
+				<VIEWITEM id="detail" src="detail.xml" transitionInEffect="fade" transitionOutEffect="fade">
+					<VIEWITEM id="video" src="video.xml" transitionInEffect="fade" transitionOutEffect="fade" />
+				</VIEWITEM>
+				<VIEWITEM id="watchDetail" src="detail.xml" transitionInEffect="fade" transitionOutEffect="fade">
+					<VIEWITEM id="video" src="video.xml" transitionInEffect="fade" transitionOutEffect="fade" />
+				</VIEWITEM>
+				<VIEWITEM id="themesDetail" src="themesDetail.xml" transitionInEffect="fade" transitionOutEffect="fade">
+				</VIEWITEM>
+			</VIEWITEM>
+		</NAVIGATIONCONTAINER>
+
+		<WINDOW id="connectPopup" layout="0,0,720,1230" align="linear:vertical|center" defaultImg="#70ffffff" visible="invisible">
+			<FRAMEANIMATION id="waitcircle" layout="100,100" repeat="true" autoStart="true">
+				<ITEM src="/res/loading/fancy_spinner_black_01.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_02.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_03.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_04.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_05.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_06.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_07.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_08.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_09.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_10.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_11.png" duration="100" />
+				<ITEM src="/res/loading/fancy_spinner_black_12.png" duration="100" />
+			</FRAMEANIMATION>
+		</WINDOW>
+
+	</UILAYOUT>
+</MOML>
+

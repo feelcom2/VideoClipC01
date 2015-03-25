@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<CMD cmd="action:go('root.start_navigationContainer','main')" delay="1000" />
+	<UILAYOUT portrait="720,1230" theme="themeMain">
+		<WINDOW layout="0,0,720,1280" align="relative" defaultImg="/res/intro.png" onClick="action:go('root.start_navigationContainer','main')">
+		</WINDOW>
+	</UILAYOUT>
+</MOML>

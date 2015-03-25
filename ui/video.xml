@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+
+	<THEMES id="themeVideo">
+		<THEME id="themeLableText" fontSize="20" textAlign="center" multiLine="true" minFontSize="-1" textColor="#ffffff" />
+	</THEMES>
+
+	<FUNCTION id="goBack">
+		<CMD cmd="action:back('root.start_navigationContainer')" />
+	</FUNCTION>
+
+	<FUNCTION id="titleVisibleCheck">
+		<CMD condition="userVariable.titleMenu == 'true'" cmd="function.titleInVisible" elseCmd="function.titleVisible" />
+	</FUNCTION>
+
+	<FUNCTION id="titleVisible">
+		<CMD cmd="userVariable.titleMenu= 'true'" />
+		<CMD cmd="animation.flyIn('topTitleBar', 0,-96,topTitleBar.width,topTitleBar.height,'',500,'')" />
+		<CMD cmd="animation.flyIn('bottomBar', 0, 96,bottomBar.width,bottomBar.height,'',500,'')" />
+		<CMD cmd="animation.show('playBtn', 'fade', '', 500, '')" />
+	</FUNCTION>
+
+	<FUNCTION id="titleInVisible">
+		<CMD cmd="userVariable.titleMenu= 'false'" />
+		<CMD cmd="animation.flyOut('topTitleBar', 0,-96,topTitleBar.width,topTitleBar.height,'',500,'')" />
+		<CMD cmd="animation.flyOut('bottomBar', 0, 96,bottomBar.width,bottomBar.height,'',500,'')" />
+		<CMD cmd="animation.hide('playBtn', 'fade', '', 500, '')" />
+	</FUNCTION>  
+
+	<FUNCTION id="isPlayCheck">
+		<CMD condition="video.isPlay == 'true'" cmd="{playBtn.defaultImg= '/res/ic_video_play.png', video.pause}" elseCmd="{playBtn.defaultImg= '/res/ic_video_pause.png', video.play}" />
+		<CMD cmd="function.titleInVisible" delay="1500" />
+	</FUNCTION>
+
+	<FUNCTION id="bookmarksAddCheck">
+		<CMD condition="bookmarksBtn.defaultImg == '/res/ic_bookmark_white.png'" cmd="function.bookmarksAdd" elseCmd="function.bookmarksDel" />
+	</FUNCTION>
+
+	<FUNCTION id="bookmarksAdd">
+		<CMD cmd="db.exec('SELECT COUNT(*) FROM videoclip WHERE title=\''+saveVariable.detailSubtitle+'\'')" />
+		<CMD condition="'0' == db.result.data(0,0)" cmd="function.dbDataCheck" elseCmd="function.dbInsertFall" />
+	</FUNCTION>
+
+	<FUNCTION id="bookmarksDel">
+		<CMD cmd="db.exec('DELETE FROM videoclip WHERE title=\''+saveVariable.detailSubtitle+'\'')" />
+		<CMD cmd="bookmarksBtn.defaultImg='/res/ic_bookmark_white.png'" />
+		<CMD cmd="device.toastPopup('Removed bookmark to My Talks')" />
+		<CMD cmd="db.exec('SELECT * FROM videoclip')" />
+		<CMD cmd="saveVariable.videoclipData = db.result.getXmlData()" />
+	</FUNCTION>
+
+	<FUNCTION id="dbDataCheck"><!-- 선택된 상품 DB 에 존재 여부 체크 -->
+		<CMD cmd="db.exec('SELECT COUNT(*) FROM videoclip WHERE title=\''+saveVariable.detailSubtitle+'\'')" />
+		<CMD condition="'0' == db.result.data(0,0)" cmd="function.dbInsert" elseCmd="function.dbInsertFall" />
+		<CMD cmd="db.exec('SELECT * FROM videoclip')" />
+		<CMD cmd="saveVariable.videoclipData = db.result.getXmlData()" />
+	</FUNCTION>
+
+	<FUNCTION id="dbInsert"><!-- 선택된 상품 DB 에 추가 -->
+		<CMD
+			cmd="db.exec('INSERT INTO videoclip VALUES(null,
+									 \''+saveVariable.detailSubtitle+'\' , 
+									 \''+saveVariable.detailImage+'\' ,
+									 \''+saveVariable.detailSummary+'\',
+									 \''+saveVariable.videoSrcUrl+'\'
+									  )')" />
+		<CMD cmd="bookmarksBtn.defaultImg='/res/ic_bookmark_red.png'" />
+		<CMD cmd="device.toastPopup('Added bookmark to My Talks')" />
+	</FUNCTION>
+
+	<FUNCTION id="dbInsertFall"><!-- 선택된 상품 DB 에 존재할 경우 팝업 -->
+		<CMD cmd="device.toastPopup('이미 등록되어 있습니다.')" />
+	</FUNCTION>
+
+	<FUNCTION id="bookmarksImageCheck">
+		<CMD cmd="db.exec('SELECT COUNT(*) FROM videoclip WHERE title=\''+saveVariable.detailSubtitle+'\'')" />
+		<CMD condition="'0' == db.result.data(0,0)" cmd="{'/res/ic_bookmark_white.png'}" elseCmd="{'/res/ic_bookmark_red.png'}" />
+	</FUNCTION>
+
+	<FUNCTION id="updateStatus">
+		<!-- update slider position -->
+		<CMD cmd="slider.max=video.playLength" />
+		<CMD cmd="slider.progress=video.playPosition" />
+
+		<!-- update time text -->
+		<CMD cmd="date.format='HH:mm:ss'" />
+		<CMD cmd="position.text=date.add('00:00:00', 'sec', video.playPosition / 1000)" />
+		<CMD cmd="length.text=date.add('00:00:00', 'sec', video.playLength / 1000)" />
+
+		<CMD cmd="function.updateStatus" delay="900" />
+	</FUNCTION>
+	<FUNCTION id="autoHideTitle">
+		<LOOP init="dot=''" count='userVariable.dotSize++ % 6' cmd="dot= dot+'.'" />
+		<CMD cmd="status.text='loading' + dot" />
+		<RETURN condition="video.playPosition==0" cmd="function.autoHideTitle" delay="500"/>
+		<CMD cmd="status.visible='invisible'" /> 
+		<CMD cmd="function.titleInVisible" /> 
+	</FUNCTION>
+	<CMD cmd="userVariable.titleMenu = 'true'" />
+	<CMD cmd="function.updateStatus" />
+	<CMD cmd="function.autoHideTitle" />
+	<UILAYOUT portrait="720,1230" theme="themeVideo">
+		<WINDOW layout="0,0,720,1230" align="relative" defaultImg="#000000">
+			<VIDEO id="video" layout="0,419,720,390" src="{saveVariable.videoSrcUrl}" controls="none" autoPlay="true" />
+			<WINDOW layout="0,0,720,1230" align="relative" onClick="function.titleVisibleCheck">
+				<WINDOW id="topTitleBar" layout="0,0,720,96" align="relative">
+					<LABEL layout="0,27,24,40" defaultImg="/res/ted_chevron.png" />
+					<BUTTON id="tedBack" layout="40,20,130,54" defaultImg="/res/top_ted.png" onClick="function.goBack"/>
+					<BUTTON id="bookmarksBtn" layout="600,0,96,96" defaultImg="{function.bookmarksImageCheck}" pressedImg="/res/bookmarks_sel.png" onClick="function.bookmarksAddCheck" />
+				</WINDOW>
+				<BUTTON id="playBtn" layout="300,556,116sr,116sr" defaultImg="/res/ic_video_pause.png" onClick="function.isPlayCheck" />
+			</WINDOW>
+
+			<LABEL id="status" layout="300,1000,120,80" themeId="themeLableText" textAlign="left|center"/>
+			<WINDOW id="bottomBar" layout="0,1144,720,86" align="linear">
+				<WINDOW layout="720,86" align="relative">
+					<SLIDER id="slider" layout="90,0,540,86" onChange="video.playPosition=slider.progress" />
+					<LABEL id="position" layout="0,0,100,86" themeId="themeLableText" />
+					<LABEL id="length" layout="620,0,100,86" themeId="themeLableText" />
+				</WINDOW>
+			</WINDOW>
+		</WINDOW>
+	</UILAYOUT>
+
+	<UILAYOUT landscape="1230,720" theme="themeVideo">
+		<WINDOW layout="0,0,1230,720" align="relative" defaultImg="#000000">
+			<VIDEO id="video" layout="0,0,1230,720" src="{saveVariable.videoSrcUrl}" controls="none" autoPlay="true" />
+			<WINDOW layout="0,0,1230,720" align="relative" onClick="function.titleVisibleCheck">
+				<WINDOW id="topTitleBar" layout="0,0,1230,86" align="relative" defaultImg="#70000000">
+					<LABEL layout="0,27,24,40" defaultImg="/res/ted_chevron.png" />
+					<BUTTON id="tedBack" layout="40,20,130,54" defaultImg="/res/top_ted.png" onClick="function.goBack"/>
+					<BUTTON id="bookmarksBtn" layout="1144,0,86,86" defaultImg="{function.bookmarksImageCheck}" pressedImg="/res/bookmarks_sel.png" onClick="function.bookmarksAddCheck" />
+				</WINDOW>
+				<BUTTON id="playBtn" layout="562,305,116sr,116sr" defaultImg="/res/ic_video_pause.png" onClick="function.isPlayCheck" />
+			</WINDOW>
+			<LABEL id="status" layout="550,550,120,80" themeId="themeLableText" textAlign="left|center"/>
+			<WINDOW id="bottomBar" layout="0,634,1230,86" align="linear" defaultImg="#70000000">
+				<WINDOW layout="1230,86" align="relative">
+					<SLIDER id="slider" layout="110,0,1010,86" onChange="video.playPosition=slider.progress" />
+					<LABEL id="position" layout="0,0,100,86" themeId="themeLableText" />
+					<LABEL id="length" layout="1130,0,100,86" themeId="themeLableText" />
+				</WINDOW>
+			</WINDOW>
+		</WINDOW>
+	</UILAYOUT>
+</MOML>
+

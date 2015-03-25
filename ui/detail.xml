@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="themeDetail">
+		<THEME id="themeRadioLabelText" textColor="#000000" fontSize="30" textAlign="center" />
+		<THEME id="themeLabelText" textColor="#000000" fontSize="40" textAlign="vCenter" />
+		<THEME id="themeSubLabelText" textColor="#000000" fontSize="30" textAlign="vCenter" multiLine="true" minFontSize="-1" />
+	</THEMES>
+
+	<FUNCTION id="goBack">
+		<CMD cmd="action:back('root.start_navigationContainer')" />
+	</FUNCTION>
+	<FUNCTION id="goVideo">
+		<CMD cmd="root.start_navigationContainer.selectedItem='video'" />
+	</FUNCTION>
+
+	<FUNCTION id="bookmarksAddCheck">
+		<CMD condition="bookmarksBtn.defaultImg == '/res/ic_bookmark_gray.png'" cmd="function.bookmarksAdd" elseCmd="function.bookmarksDel" />
+	</FUNCTION>
+
+	<FUNCTION id="bookmarksAdd">
+		<CMD cmd="db.exec('SELECT COUNT(*) FROM videoclip WHERE title=\''+function.root.dbEscape(saveVariable.detailSubtitle)+'\'')" />
+		<CMD condition="'0' == db.result.data(0,0)" cmd="function.dbDataCheck" elseCmd="function.dbInsertFall" />
+	</FUNCTION>
+
+	<FUNCTION id="bookmarksDel">
+		<CMD cmd="db.exec('DELETE FROM videoclip WHERE title=\''+function.root.dbEscape(saveVariable.detailSubtitle)+'\'')" />
+		<CMD cmd="bookmarksBtn.defaultImg='/res/ic_bookmark_gray.png'" />
+		<CMD cmd="device.toastPopup('Removed bookmark to My Talks')" />
+		<CMD cmd="db.exec('SELECT * FROM videoclip')" />
+		<CMD cmd="saveVariable.videoclipData = db.result.getXmlData()" />
+	</FUNCTION>
+
+	<FUNCTION id="dbDataCheck"><!-- 선택된 상품 DB 에 존재 여부 체크 -->
+		<CMD cmd="db.exec('SELECT COUNT(*) FROM videoclip WHERE title=\''+function.root.dbEscape(saveVariable.detailSubtitle)+'\'')" />
+		<CMD condition="'0' == db.result.data(0,0)" cmd="function.dbInsert" elseCmd="function.dbInsertFall" />
+		<CMD cmd="db.exec('SELECT * FROM videoclip')" />
+		<CMD cmd="saveVariable.videoclipData = db.result.getXmlData()" />
+	</FUNCTION>
+
+	<FUNCTION id="dbInsert"><!-- 선택된 상품 DB 에 추가 -->
+		<CMD
+			cmd="db.exec('INSERT INTO videoclip VALUES(null,
+									 \''+function.root.dbEscape(saveVariable.detailSubtitle)+'\' , 
+									 \''+function.root.dbEscape(saveVariable.detailImage)+'\' ,
+									 \''+function.root.dbEscape(saveVariable.detailSummary)+'\',
+									 \''+function.root.dbEscape(saveVariable.videoSrcUrl)+'\'
+									  )')" />
+		<CMD cmd="bookmarksBtn.defaultImg='/res/ic_bookmark_red.png'" />
+		<CMD cmd="device.toastPopup('Added bookmark to My Talks')" />
+	</FUNCTION>
+
+	<FUNCTION id="dbInsertFall"><!-- 선택된 상품 DB 에 존재할 경우 팝업 -->
+		<CMD cmd="device.toastPopup('이미 등록되어 있습니다.')" />
+	</FUNCTION>
+
+	<FUNCTION id="bookmarksImageCheck">
+		<CMD cmd="db.exec('SELECT COUNT(*) FROM videoclip WHERE title=\''+function.root.dbEscape(saveVariable.detailSubtitle)+'\'')" />
+		<CMD condition="'0' == db.result.data(0,0)" cmd="{'/res/ic_bookmark_gray.png'}" elseCmd="{'/res/ic_bookmark_red.png'}" />
+	</FUNCTION>
+
+	<FUNCTION id="bookmarksImageCheck1">
+		<CMD cmd="db.exec('SELECT COUNT(*) FROM videoclip WHERE title=\''+function.root.dbEscape(saveVariable.detailSubtitle)+'\'')" />
+		<CMD condition="'0' == db.result.data(0,0)" cmd="{bookmarksBtn.defaultImg = '/res/ic_bookmark_gray.png'}" elseCmd="{bookmarksBtn.defaultImg = '/res/ic_bookmark_red.png'}" />
+	</FUNCTION>
+
+	<UILAYOUT portrait="720,1230" theme="themeDetail">
+		<WINDOW layout="0,0,720,1230" align="relative">
+			<WINDOW layout="0,0,720,96" align="relative" defaultImg="#ffffff" onShow="function.bookmarksImageCheck1">
+				<LABEL layout="0,27,24,40" defaultImg="/res/back.png" />
+				<BUTTON layout="20,20,130,54" defaultImg="/res/top_ted.png" onClick="function.goBack" />
+				<LABEL layout="170,0,150,96" themeId="themeLabelText" text="{userVariable.titleValue}" textColor="#666666" />
+				<BUTTON id="bookmarksBtn" layout="624,0,96,96" pressedImg="/res/bookmarks_sel.png" onClick="function.bookmarksAddCheck" />
+			</WINDOW>
+			<WINDOW layout="0,96,720,1134" align="relative" defaultImg="#ffffff">
+				<IMAGE layout="20,20,680,468" loadingImg="/res/placeholder_dual_theme_detail.png" defaultImg="{saveVariable.detailImage}" />
+				<IMAGE layout="20,358,680,133" defaultImg="/res/home_txet_bg.png" />
+				<LABEL layout="40,358,640,133" themeId="themeSubLabelText" textColor="#ffffff" text="{saveVariable.detailSubtitle}" />
+				<BUTTON id="goVideoBtn" layout="310,170,116sr,116sr" defaultImg="/res/ic_video_play.png" onClick="function.goVideo"/>
+				<WINDOW layout="0,508,720,96" align="linear:horizontal">
+					<RADIO id="detailRadio" layout="238,96" groupId="detail" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" selected="true" onClick="navigationDetail.selectItem ='about'">
+						<LABEL layout="238,96" text="About" themeId="themeRadioLabelText" />
+					</RADIO>
+					<LABEL layout="2,97" defaultImg="/res/tabLine.png" />
+					<RADIO id="detailRadio" layout="238,96" groupId="detail" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" onClick="navigationDetail.selectItem ='watch'">
+						<LABEL layout="238,96" text="Watch Next" themeId="themeRadioLabelText" />
+					</RADIO>
+					<LABEL layout="2,97" defaultImg="/res/tabLine.png" />
+					<RADIO id="detailRadio" layout="238,96" groupId="detail" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" onClick="navigationDetail.selectItem ='related'">
+						<LABEL layout="238,96" text="Related" themeId="themeRadioLabelText" />
+					</RADIO>
+					<LABEL layout="2,97" defaultImg="/res/tabLine.png" />
+				</WINDOW>
+
+				<NAVIGATIONCONTAINER id="navigationDetail" layout="0,610,720,524" selectedItem="about">
+					<VIEWITEM id="about" src="./about.xml" transitionInEffect="none" transitionOutEffect="none" />
+					<VIEWITEM id="watch" src="./watch.xml" transitionInEffect="none" transitionOutEffect="none" />
+					<VIEWITEM id="related" src="./related.xml" transitionInEffect="none" transitionOutEffect="none" />
+				</NAVIGATIONCONTAINER>
+			</WINDOW>
+			<LABEL layout="0,96,720,13" defaultImg="/res/shadow.png" />
+		</WINDOW>
+	</UILAYOUT>
+</MOML>

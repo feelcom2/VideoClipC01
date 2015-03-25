@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="themeWatch">
+		<THEME id="themeListSubText" textColor="#000000" fontSize="30" textAlign="vCenter" multiLine="true" minFontSize="-1" />
+	</THEMES>
+
+	<FUNCTION id="goDetail">
+		<CMD cmd="userVariable.titleValue =''" />
+		<CMD cmd="application.runScript('root.start_navigationContainer.detail', 'container.src=container.documentUrl')" />
+	</FUNCTION>
+	
+	<UILAYOUT portrait="720,524" theme="themeWatch">
+		<WINDOW layout="0,0,720,524" align="relative">
+			<LIST2 id="watchList" layout="0,0,720,524" dataSource="http://feeds.feedburner.com/tedtalks_video" dataList="/rss/channel/item" divider="#e4e4e4">
+				<LISTLAYOUT>
+					<WINDOW layout="0,0,680,145" align="relative">
+						<IMAGE layout="0,0,182,145" loadingImg="/res/placeholder_list.png" defaultImg="{string.replace(xpath.evaluate('./media:thumbnail/@url'),'480x360', '120x90')}" />
+						<LABEL layout="202,0,458,145" themeId="themeListSubText" textColor="#000000" text="{xpath.evaluate('./itunes:subtitle/text()')}" />
+					</WINDOW>
+					<BUTTON layout="182,0,538,145" defaultImg="#00000000" pressedImg="#95ffbfbf"
+						onClick="saveVariable.detailImage = xpath.evaluate('./itunes:image/@href'),saveVariable.detailSubtitle = xpath.evaluate('./itunes:subtitle/text()'), saveVariable.detailSummary = xpath.evaluate('./itunes:summary/text()'), saveVariable.videoSrcUrl = xpath.evaluate('./media:content/@url'),function.goDetail" />
+				</LISTLAYOUT>
+			</LIST2>
+		</WINDOW>
+		<LABEL layout="0,0,720,13" defaultImg="/res/shadow.png" />
+	</UILAYOUT>
+</MOML>

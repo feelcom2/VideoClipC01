@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="themeThemeDetail">
+		<THEME id="themeRadioLabelText" textColor="#000000" fontSize="30" textAlign="center" />
+		<THEME id="themeLabelText" textColor="#000000" fontSize="30" textAlign="vCenter" multiLine="true" minFontSize="-1" />
+	</THEMES>
+
+	<FUNCTION id="goBack">
+		<CMD cmd="action:back('root.start_navigationContainer')" />
+	</FUNCTION>
+	<UILAYOUT portrait="720,1230" theme="themeThemeDetail">
+		<WINDOW layout="0,0,720,1230" align="relative">
+			<WINDOW layout="0,0,720,96" align="relative" defaultImg="#ffffff">
+				<LABEL layout="0,27,24,40" defaultImg="/res/back.png" />
+				<BUTTON layout="20,20,130,54" defaultImg="/res/top_ted.png" onClick="function.goBack" />
+			</WINDOW>
+			<WINDOW layout="0,96,720,1134" align="relative" defaultImg="#ffffff">
+				<IMAGE layout="20,20,680,468" loadingImg="/res/placeholder_dual_theme_detail.png" defaultImg="{saveVariable.detailImage}" />
+				<IMAGE layout="20,358,680,133" defaultImg="/res/home_txet_bg.png" />
+				<LABEL layout="40,358,640,133" themeId="themeLabelText" textColor="#ffffff" text="{saveVariable.detailSubtitle}" />
+				<WINDOW layout="0,508,720,96" align="linear:horizontal">
+					<RADIO id="detailRadio" layout="360,96" groupId="detail" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" selected="true" onClick="navigationThemesDetail.selectItem ='talks'">
+						<LABEL layout="360,96" text="Talks" themeId="themeRadioLabelText" />
+					</RADIO>
+					<LABEL layout="2,97" defaultImg="/res/tabLine.png" />
+					<RADIO id="detailRadio" layout="360,96" groupId="detail" style="button" defaultImg="/res/tab_nor.png" checkedImg="/res/tab_sel.png" onClick="navigationThemesDetail.selectItem ='about'">
+						<LABEL layout="360,96" text="About" themeId="themeRadioLabelText" />
+					</RADIO>
+					<LABEL layout="2,97" defaultImg="/res/tabLine.png" />
+				</WINDOW>
+
+				<NAVIGATIONCONTAINER id="navigationThemesDetail" layout="0,610,720,524" selectedItem="talks">
+					<VIEWITEM id="talks" src="./talks.xml" transitionInEffect="none" transitionOutEffect="none" />
+					<VIEWITEM id="about" src="./about.xml" transitionInEffect="none" transitionOutEffect="none" />
+				</NAVIGATIONCONTAINER>
+			</WINDOW>
+			<LABEL layout="0,96,720,13" defaultImg="/res/shadow.png" />
+		</WINDOW>
+	</UILAYOUT>
+
+</MOML>

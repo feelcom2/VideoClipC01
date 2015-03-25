@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="themeSearch">
+		<THEME id="themeListSubText" fontSize="30" textAlign="vCenter" multiLine="true" minFontSize="-1" />
+	</THEMES>
+	<FUNCTION id="goSearchVisible">
+		<CMD cmd="userVariable.searchMenu= 'true'" />
+		<CMD cmd="animation.flyIn('searchBarWindow', 0,-97,searchBarWindow.width,searchBarWindow.height,'',500,'')" />
+	</FUNCTION>
+
+	<FUNCTION id="goSearchInVisible">
+		<CMD cmd="userVariable.searchMenu= 'false'" />
+		<CMD cmd="animation.flyOut('searchBarWindow', 0,-97,searchBarWindow.width,searchBarWindow.height,'',500,'')" />
+	</FUNCTION>
+
+	<FUNCTION id="goDetail">
+		<CMD cmd="action:go('root.start_navigationContainer','searchDetail')" />
+	</FUNCTION>
+
+	<FUNCTION id="goSearch">
+		<CMD cmd="userVariable.searchValue = '/rss/channel//item[contains(itunes:summary/text(), \''+searchEditBox.text+'\')]'" />
+		<CMD cmd="searchList.dataList = '/rss/channel//item[contains(itunes:summary/text(), \''+searchEditBox.text+'\')]'" />
+		<CMD cmd="searchList.dataSource = 'http://feeds.feedburner.com/tedtalks_video'" />
+		<CMD cmd="function.goSearchInVisible" />
+	</FUNCTION>
+
+
+	<CMD cmd="userVariable.searchMenu = 'false'" />
+	<UILAYOUT portrait="720,1230" theme="themeSearch">
+		<WINDOW layout="0,0,720,1230" align="relative" defaultImg="#ffffff">
+			<WINDOW layout="0,0,720,96" align="relative" defaultImg="#ffffff">
+				<LABEL layout="0,27,24,40" defaultImg="/res/back.png" />
+				<BUTTON layout="20,20,130,54" defaultImg="/res/top_ted.png" onClick="action:back('root.start_navigationContainer')" />
+				<BUTTON layout="629,0,96,96" defaultImg="/res/ic_search_gray.png" pressedImg="/res/ic_search_gray_sel.png" onClick="function.goSearchVisible" />
+			</WINDOW>
+
+			<LIST2 id="searchList" layout="0,96,720,1134" dataSource="http://feeds.feedburner.com/tedtalks_video" dataList="{userVariable.searchValue}" divider="#e4e4e4">
+				<LISTLAYOUT>
+					<WINDOW layout="0,0,680,145" align="relative">
+						<IMAGE layout="0,0,182,145" loadingImg="/res/placeholder_list.png" defaultImg="{string.replace(xpath.evaluate('./media:thumbnail/@url'),'480x360', '120x90')}" />
+						<LABEL layout="202,0,458,145" themeId="themeListSubText" textColor="#000000" text="{xpath.evaluate('./itunes:subtitle/text()')}" />
+					</WINDOW>
+					<BUTTON layout="182,0,538,145" defaultImg="#00000000" pressedImg="#95ffbfbf"
+						onClick="saveVariable.detailImage = xpath.evaluate('./itunes:image/@href'),saveVariable.detailSubtitle = xpath.evaluate('./itunes:subtitle/text()'), saveVariable.detailSummary = xpath.evaluate('./itunes:summary/text()'), saveVariable.videoSrcUrl = xpath.evaluate('./media:content/@url'),function.goDetail" />
+				</LISTLAYOUT>
+			</LIST2>
+			<LABEL layout="0,0,720,13" defaultImg="/res/shadow.png" />
+			<WINDOW id="searchBarWindow" layout="0,0,720,97" align="relative" defaultImg="/res/searchBar.png" visible="invisible">
+				<EDIT id="searchEditBox" layout="120,14,500,79" text="" placeholder="Search Talks" fontSize="40" textColor="#808080" fontStyle="bold" textAlign="vCenter" returnKeyType="go" defaultImg="#00ffffff" />
+				<BUTTON layout="35,18,60,60" defaultImg="/res/ted_launcher_icon.png" onClick="function.goSearchInVisible" />
+				<BUTTON layout="625,0,96,97" defaultImg="/res/ic_search_gray.png" onClick="function.goSearch" />
+			</WINDOW>
+			<LABEL layout="0,96,720,13" defaultImg="/res/shadow.png" />
+		</WINDOW>
+	</UILAYOUT>
+</MOML>

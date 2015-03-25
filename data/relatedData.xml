@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DATA>
+    <LIST>
+        <data>Culture</data>
+        <search>cu</search>
+    </LIST>
+    <LIST>
+        <data>Clobal issues</data>
+        <search>cl</search>
+    </LIST>
+    <LIST>
+        <data>Sports</data>
+        <search>sp</search>
+    </LIST>
+    <LIST>
+        <data>Violence</data>
+        <search>vi</search>
+    </LIST>
+    <LIST>
+        <data>War</data>
+        <search>wa</search>
+    </LIST>
+</DATA>
