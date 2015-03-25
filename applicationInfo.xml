@@ -2,6 +2,6 @@
 <MOML>
 	<APPLICATIONINFO>
 		<START url="ui/start.xml" />
-		<ORIENTATION type="defaultPortrait" /> 
+		<ORIENTATION type="defaultPortrait"/> 
 	</APPLICATIONINFO>
 </MOML>
