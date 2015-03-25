@@ -110,7 +110,7 @@
 			</WINDOW>
 
 			<NAVIGATIONCONTAINER id="navigationMain" layout="720,1038" selectedItem="featured" defaultImg="#ffffff">
-				<VIEWITEM id="featured" src="./featured.xml" transitionInEffect="none" transitionOutEffect="none" />
+				<VIEWITEM id="1featured" src="./featured.xml" transitionInEffect="none" transitionOutEffect="none" />
 				<VIEWITEM id="allTalks" src="./allTalks.xml" transitionInEffect="none" transitionOutEffect="none" />
 				<VIEWITEM id="myTalks" src="./myTalks.xml" transitionInEffect="none" transitionOutEffect="none" />
 			</NAVIGATIONCONTAINER>
